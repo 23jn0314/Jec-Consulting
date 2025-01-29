@@ -1,3 +1,26 @@
+<?php
+    if($_SERVER['REQUEST_METHOD'] === "POST"){
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $message = $_POST['message'];
+
+        $logFile = __DIR__ . "/inquiry.csv"; // 現在のディレクトリ内の ocr.log に書き込む
+        $entry = "$name,$email,$message\n"; // "<name>,<price>\n" の形式で記録
+    
+        // ファイルを開いて末尾に追記 (a = append)
+        $file = fopen($logFile, "a");
+    
+        if ($file === false) {
+            echo("Error: Could not open the log file.<br>");
+        }
+    
+        // 書き込み
+        fwrite($file, $entry);
+    
+        // ファイルを閉じる
+        fclose($file);
+    }
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -97,7 +120,7 @@
         <div class="container">
             <h2>お問い合わせ</h2>
             <p>以下のフォームからお気軽にお問い合わせください。</p>
-            <form class="row g-3">
+            <form class="row g-3" action = "" method="POST">
                 <div class="col-md-6">
                     <label for="name" class="form-label">お名前</label>
                     <input type="text" id="name" class="form-control" placeholder="例: 山田 太郎" required>
